@@ -9,3 +9,14 @@
 
 举例：每15分钟维护一次登录状态，发现被踢出后，自动重登录。
 
+	helper = seuhelper("220170000", "123456")
+
+	# 单次操作：登录账户
+	# helper.command_login()
+
+	# 单次操作：注销账户
+	# helper.command_logout()
+
+	# 部署：10分钟检测一次登录状态，注销的话就自动重登
+	# helper.keep_alive(10)
+  
