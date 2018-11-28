@@ -55,14 +55,15 @@ class seuhelper:
 
 	def keep_alive(self, interval=10):
 		print("您的计算机将会每隔" + str(interval) + "分钟检测一次校园网登录状态\n若想退出自动检测，请直接退出程序。")
-		interval = interval * 60    # 输入分钟，转换成秒
+		secsPortion = interval * 60 / 5    # 输入分钟，转换成秒，按照5秒切分，以免进程被锁
 		while True:
 			if self.check_status():
 				print("用户已在登录状态，等待下次检测...")
 			else:
 				print("用户未登录，准备自动登录中...")
 				self.command_login()
-			time.sleep(interval)
+			for i in range(int(secsPortion)):
+				time.sleep(5.0)
 
 	# 读取html
 	def login(self, htmlUrl='', referer='http://w.seu.edu.cn/', data={}, method='POST'):
