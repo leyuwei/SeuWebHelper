@@ -81,7 +81,7 @@
 
 无论您选择上面三种打开方式的哪一种，运行的效果都大体如下所示：
 
-![新运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/config/snapshot2.png)
+![新运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/config/snapshot2.jpg)
 
 ![旧运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/config/snapshot.png)
 
