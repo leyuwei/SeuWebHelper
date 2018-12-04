@@ -81,9 +81,8 @@
 
 无论您选择上面三种打开方式的哪一种，运行的效果都大体如下所示：
 
-![新运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/snapshot.png)
+![新运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/config/snapshot2.png)
 
-![旧运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/snapshot.png)
-
+![旧运行效果图](https://github.com/leyuwei/SeuWebHelper/blob/master/config/snapshot.png)
 
 如果你想更加方便一点，可以在`run.bat`或`校园网登录.exe`文件上右键->发送到桌面快捷方式，在桌面快捷方式上就可以直接双击运行打开脚本。（P.S.桌面快捷方式支持修改名称和图标，可以修改使其更加美观！）
