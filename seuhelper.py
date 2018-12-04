@@ -37,7 +37,7 @@ class seuhelper:
 		if self.check_str(self.str_check, resptext):
 			print("用户:" + self.usr + " 登录成功！")
 		else:
-			print("登录失败，请检查密码是否正确！")
+			print("登录失败，请检查密码是否正确！\n如密码正确，请检查网络账户是否正常续费！")
 
 	def command_logout(self):
 		resptext = self.login(self.url_logout)
@@ -54,14 +54,21 @@ class seuhelper:
 			return False  # 用户未登录
 
 	def keep_alive(self, interval=10):
+		# 1204 去除冗余提醒
 		print("您的计算机将会每隔" + str(interval) + "分钟检测一次校园网登录状态\n若想退出自动检测，请直接退出程序。")
 		secsPortion = interval * 60 / 5    # 输入分钟，转换成秒，按照5秒切分，以免进程被锁
+		last_status = False
 		while True:
 			if self.check_status():
-				print("用户已在登录状态，等待下次检测...")
+				if not last_status:
+					print("用户:" + str(self.usr) + " 已在登录状态，等待下次检测...")
+					last_status = True
+				else:
+					print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())) + " 检测通过√")
 			else:
 				print("用户未登录，准备自动登录中...")
 				self.command_login()
+				last_status = False
 			for i in range(int(secsPortion)):
 				time.sleep(5.0)
 

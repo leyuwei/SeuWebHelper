@@ -1,0 +1,1 @@
+pyinstaller -F --icon=icon.ico main.py -p seuhelper.py
