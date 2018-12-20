@@ -2,6 +2,7 @@
 # Compiled with Python 3.7
 
 import time
+import os
 import base64
 import requests
 from http import cookiejar
@@ -83,5 +84,16 @@ class seuhelper:
 			else:
 				r = self.session.post(htmlUrl, headers=self.headers, data=data)
 		except:
-			raise Exception("网络链接出现问题")
+			print("计算机网络连接出现问题，准备执行自动修复，请稍等...")
+			os.system("ipconfig /release")
+			os.system("ipconfig /renew")
+			os.system("cls")
+			print("修复完成，准备尝试重新操作...")
+			try:
+				if method.upper() == 'GET':
+					r = self.session.get(htmlUrl, headers=self.headers, data=data)
+				else:
+					r = self.session.post(htmlUrl, headers=self.headers, data=data)
+			except:
+				raise ConnectionError("网络连接出现严重问题无法修复，请自行检查计算机配置")
 		return r.text
