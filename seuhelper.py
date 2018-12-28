@@ -3,6 +3,7 @@
 
 import time
 import os
+import urllib3
 import base64
 import requests
 from http import cookiejar
@@ -12,9 +13,12 @@ class seuhelper:
 	usr = ""
 	pwd = ""
 	session = ""
-	str_check = ["\\u7528\\u6237\\u5df2\\u767b\\u5f55", "\\u8ba4\\u8bc1\\u6210\\u529f", "ALREADY_LOGIN"]
+	str_check = ["\\u7528\\u6237\\u5df2\\u767b\\u5f55", "\\u8ba4\\u8bc1\\u6210\\u529f", "ALREADY_LOGIN", "INVALID_LOCATION", "\\u5730\\u5740\\u9519\\u8bef"]
 	url_login = "http://w.seu.edu.cn/index.php/index/login"
 	url_logout = "http://w.seu.edu.cn/index.php/index/logout"
+	url_login_sub = "https://w.seu.edu.cn/index.php/index/login"
+	url_logout_sub = "https://w.seu.edu.cn/index.php/index/logout"
+	url_host = "http://w.seu.edu.cn/"
 	headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36',
 	           'Origin': 'http://w.seu.edu.cn', 'Referer': 'http://w.seu.edu.cn/',
 	           'Host': 'w.seu.edu.cn', 'X-Requested-With': 'XMLHttpRequest'}
@@ -25,6 +29,15 @@ class seuhelper:
 		# 思路来源：http://w.seu.edu.cn/Modules/Home/Public/Js/login.js
 		self.session = requests.Session()
 		self.session.cookies = cookiejar.CookieJar()
+		self.check_ssl()    # 1228 Update : SSL check
+
+	def check_ssl(self):
+		try:
+			self.session.get(self.url_host, headers=self.headers)
+		except:
+			self.url_login = self.url_login_sub
+			self.url_logout = self.url_logout_sub
+			print("检测到校园网安全协议变更，已自动为您更换接口...")
 
 	def check_str(self, dict, text):
 		for item in dict:
@@ -74,15 +87,16 @@ class seuhelper:
 				time.sleep(5.0)
 
 	# 读取html
-	def login(self, htmlUrl='', referer='http://w.seu.edu.cn/', data={}, method='POST'):
+	def login(self, htmlUrl='', data={}, method='POST'):
+		urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 		time.sleep(0.2)  # 防止封IP
 		if htmlUrl == '':
 			htmlUrl = self.url_login
 		try:
 			if method.upper() == 'GET':
-				r = self.session.get(htmlUrl, headers=self.headers, data=data)
+				r = self.session.get(htmlUrl, headers=self.headers, data=data, verify=False)
 			else:
-				r = self.session.post(htmlUrl, headers=self.headers, data=data)
+				r = self.session.post(htmlUrl, headers=self.headers, data=data, verify=False)
 		except:
 			print("计算机网络连接出现问题，准备执行自动修复，请稍等...")
 			os.system("ipconfig /release")
@@ -95,5 +109,6 @@ class seuhelper:
 				else:
 					r = self.session.post(htmlUrl, headers=self.headers, data=data)
 			except:
-				raise ConnectionError("网络连接出现严重问题无法修复，请自行检查计算机配置")
+				print("网络连接出现严重问题无法修复，请自行检查计算机配置")
+				return ""
 		return r.text

@@ -7,6 +7,8 @@ from sys import argv
 
 def main():
 
+	# 1228 增加Invalid_Location错误检测
+	# 1228 增加对校园网https安全接口的自动识别
 	# 1220 增加网络连接故障时的自动修复
 	# 1204 增加用户输入参数支持
 	# 1204 修复切换登录用户却仍然使用上一用户的BUG
