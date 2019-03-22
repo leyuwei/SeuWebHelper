@@ -14,6 +14,7 @@ class seuhelper:
 	pwd = ""
 	session = ""
 	str_check = ["\\u7528\\u6237\\u5df2\\u767b\\u5f55", "\\u8ba4\\u8bc1\\u6210\\u529f", "ALREADY_LOGIN", "INVALID_LOCATION", "\\u5730\\u5740\\u9519\\u8bef"]
+	str_service_unavailable = ["\\u670d\\u52a1\\u5931\\u6548"]
 	url_login = "http://w.seu.edu.cn/index.php/index/login"
 	url_logout = "http://w.seu.edu.cn/index.php/index/logout"
 	url_login_sub = "https://w.seu.edu.cn/index.php/index/login"
@@ -31,13 +32,19 @@ class seuhelper:
 		self.session.cookies = cookiejar.CookieJar()
 		self.check_ssl()    # 1228 Update : SSL check
 
-	def check_ssl(self):
-		try:
-			self.session.get(self.url_host, headers=self.headers)
-		except:
+	def check_ssl(self, force = False):
+		if not force:
+			try:
+				self.session.get(self.url_host, headers=self.headers)
+			except:
+				self.url_login = self.url_login_sub
+				self.url_logout = self.url_logout_sub
+				print("检测到校园网安全协议变更，已自动为您更换接口...")
+		else:
+			# 0322 Update: Service unavailable detection.
 			self.url_login = self.url_login_sub
 			self.url_logout = self.url_logout_sub
-			print("检测到校园网安全协议变更，已自动为您更换接口...")
+			print("检测到校园网异常，已强制为您更换接口...")
 
 	def check_str(self, dict, text):
 		for item in dict:
@@ -51,7 +58,13 @@ class seuhelper:
 		if self.check_str(self.str_check, resptext):
 			print("用户:" + self.usr + " 登录成功！")
 		else:
-			print("登录失败，请检查密码是否正确！\n如密码正确，请检查网络账户是否正常续费！")
+			# 0322 Update: Service unavailable detection.
+			if self.check_str(self.str_service_unavailable, resptext):
+				# change protocol and try again
+				self.check_ssl(force=True)
+				self.login(self.url_login, data=params)
+			else:
+				print("登录失败，请检查密码是否正确！\n如密码正确，请检查网络账户是否正常续费！")
 
 	def command_logout(self):
 		resptext = self.login(self.url_logout)

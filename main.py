@@ -7,6 +7,8 @@ from sys import argv
 
 def main():
 
+	# 0322 适配校园网新SSL错误提示
+	# 0322 修复校园网更新导致的登录失效问题
 	# 1228 增加Invalid_Location错误检测
 	# 1228 增加对校园网https安全接口的自动识别
 	# 1220 增加网络连接故障时的自动修复
