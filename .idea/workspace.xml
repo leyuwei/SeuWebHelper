@@ -18,7 +18,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/seuhelper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1038">
+            <state relative-caret-position="2516">
               <caret line="73" column="45" selection-start-line="73" selection-start-column="45" selection-end-line="73" selection-end-column="45" />
               <folding>
                 <element signature="e#51#62#0" expanded="true" />
@@ -31,7 +31,7 @@
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="259">
-              <caret line="13" column="25" lean-forward="true" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
+              <caret line="13" column="25" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
               <folding>
                 <element signature="e#51#67#0" expanded="true" />
               </folding>
@@ -173,16 +173,18 @@
       <workItem from="1545359620206" duration="90000" />
       <workItem from="1545990670408" duration="3264000" />
       <workItem from="1553236497600" duration="912000" />
+      <workItem from="1555341056705" duration="657000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4691000" />
+    <option name="totallyTimeSpent" value="5348000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09936407" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.07472178" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -213,7 +215,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/seuhelper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1038">
+        <state relative-caret-position="2516">
           <caret line="73" column="45" selection-start-line="73" selection-start-column="45" selection-end-line="73" selection-end-column="45" />
           <folding>
             <element signature="e#51#62#0" expanded="true" />
@@ -224,7 +226,7 @@
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="259">
-          <caret line="13" column="25" lean-forward="true" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
+          <caret line="13" column="25" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
           <folding>
             <element signature="e#51#67#0" expanded="true" />
           </folding>
