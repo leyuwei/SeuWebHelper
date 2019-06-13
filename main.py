@@ -2,11 +2,13 @@
 # Compiled with Python 3.7
 
 import seuhelper
+import ctypes
 from seuhelper import *
 from sys import argv
 
 def main():
 
+	# 0613 更新五参数输入时隐藏运行窗口功能
 	# 0322 适配校园网新SSL错误提示
 	# 0322 修复校园网更新导致的登录失效问题
 	# 1228 增加Invalid_Location错误检测
@@ -35,6 +37,17 @@ def main():
 		helper.command_logout()
 		helper.keep_alive(10)
 	elif argv.__len__() == 4:
+		helper = seuhelper(argv[1], argv[2])
+		helper.command_logout()
+		helper.keep_alive(int(argv[3]))
+	elif argv.__len__() >= 5:
+		print("已准备隐藏运行窗口...")
+		print("如需关闭请在任务管理器中结束python.exe进程！")
+		time.sleep(5)
+		whnd = ctypes.windll.kernel32.GetConsoleWindow()
+		if whnd != 0:
+			ctypes.windll.user32.ShowWindow(whnd, 0)
+			ctypes.windll.kernel32.CloseHandle(whnd)
 		helper = seuhelper(argv[1], argv[2])
 		helper.command_logout()
 		helper.keep_alive(int(argv[3]))
