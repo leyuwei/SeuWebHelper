@@ -8,6 +8,7 @@ from sys import argv
 
 def main():
 
+	# 0801 适配全新校园网终端（旧版不再可用）
 	# 0613 更新五参数输入时隐藏运行窗口功能
 	# 0322 适配校园网新SSL错误提示
 	# 0322 修复校园网更新导致的登录失效问题
@@ -18,7 +19,14 @@ def main():
 	# 1204 修复切换登录用户却仍然使用上一用户的BUG
 	# 1128 增加命令行参数模式支持
 
-	if argv.__len__() == 1:
+	is_testing = False
+
+	if is_testing:
+		helper = seuhelper("000000000", "123456")
+		helper.command_logout()
+		helper.keep_alive(int(20))
+
+	if argv.__len__() == 1 and not is_testing:
 		# 不输入任何参数时，脚本会接受外部输入
 		usr = input("请输入用户名： ")
 		pwd = input("请输入密码： ")
@@ -32,15 +40,15 @@ def main():
 		# helper.command_logout()
 		# 部署：10分钟检测一次登录状态，注销的话就自动重登
 		# helper.keep_alive(10)
-	elif argv.__len__() == 3:
+	elif argv.__len__() == 3 and not is_testing:
 		helper = seuhelper(argv[1], argv[2])
 		helper.command_logout()
 		helper.keep_alive(10)
-	elif argv.__len__() == 4:
+	elif argv.__len__() == 4 and not is_testing:
 		helper = seuhelper(argv[1], argv[2])
 		helper.command_logout()
 		helper.keep_alive(int(argv[3]))
-	elif argv.__len__() >= 5:
+	elif argv.__len__() >= 5 and not is_testing:
 		print("已准备隐藏运行窗口...")
 		print("如需关闭请在任务管理器中结束python.exe进程！")
 		time.sleep(5)
