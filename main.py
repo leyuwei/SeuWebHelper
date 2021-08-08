@@ -8,6 +8,8 @@ from sys import argv
 
 def main():
 
+	# 20210507 修复了每次登录时校园网均检测为未在线的问题
+	# 20210507 新增对修复网络后重启猎豹WIFI的支持（程序目录须拷贝有liebao.Ink的快捷方式）
 	# 0801 适配全新校园网终端（旧版不再可用）
 	# 0613 更新五参数输入时隐藏运行窗口功能
 	# 0322 适配校园网新SSL错误提示
@@ -42,11 +44,9 @@ def main():
 		# helper.keep_alive(10)
 	elif argv.__len__() == 3 and not is_testing:
 		helper = seuhelper(argv[1], argv[2])
-		helper.command_logout()
 		helper.keep_alive(10)
 	elif argv.__len__() == 4 and not is_testing:
 		helper = seuhelper(argv[1], argv[2])
-		helper.command_logout()
 		helper.keep_alive(int(argv[3]))
 	elif argv.__len__() >= 5 and not is_testing:
 		print("已准备隐藏运行窗口...")
@@ -57,7 +57,6 @@ def main():
 			ctypes.windll.user32.ShowWindow(whnd, 0)
 			ctypes.windll.kernel32.CloseHandle(whnd)
 		helper = seuhelper(argv[1], argv[2])
-		helper.command_logout()
 		helper.keep_alive(int(argv[3]))
 	else:
 		print("请正确输入命令行参数\n输入格式：python main.py [用户名] [密码] [检测间隔(分钟)]*\n检测间隔为可选参数，不输入时默认为10分钟")

@@ -8,6 +8,7 @@ import urllib3
 import socket
 import requests
 import random
+import wmi
 from psutil import net_if_addrs
 from http import cookiejar
 
@@ -16,12 +17,12 @@ class seuhelper:
 	usr = ""
 	pwd = ""
 	session = ""
-	str_check = ["\"ret_code\":0", "ALREADY_LOGIN", "已经登录", "登录成功", "成功登录", "\\u6210\\u529f", "注销成功"]
-	str_status = ["\"result\":1"]
+	str_check = ["\"ret_code\":\"0\"", "ALREADY_LOGIN", "已经登录", "登录成功", "成功登录", "\\u6210\\u529f", "注销成功"]
+	str_status = ["\"result\":\"1\""]
 	str_filter = ["登录成功标志", "登录失败标志"]
-	url_login = "http://202.119.25.2:801/eportal/"
-	url_checkstatus = "http://202.119.25.2/drcom/chkstatus"
-	url_jsversion = "http://202.119.25.2/a41.js"
+	url_login = "https://w.seu.edu.cn:801/eportal/"
+	url_checkstatus = "https://w.seu.edu.cn:801/eportal/"
+	url_jsversion = "https://w.seu.edu.cn/a41.js"
 	headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
 	           'DNT': '1', 'Referer': 'http://202.119.25.2/'}
 
@@ -59,11 +60,21 @@ class seuhelper:
 	def renew_ip(self):
 		time.sleep(2)
 		print("计算机网络连接出现问题，准备执行自动修复，请稍等...")
-		os.system("ipconfig /release")
 		os.system("ipconfig /renew")
 		os.system("cls")
-		print("修复完成，准备尝试重新操作...")
+		print("修复完成，准备尝试重新操作/重启猎豹wifi...")
 		time.sleep(2)
+		f = wmi.WMI()
+		for process in f.Win32_Process():
+			if 'kwifi' in process.name:
+				print(f"Killing {process.name}...")
+				process.Terminate()
+		time.sleep(4)
+		try:
+			os.startfile(r"liebao.lnk")
+		except:
+			pass
+		print("重启猎豹WIFI成功...")
 
 	def get_my_ip(self):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -77,7 +88,11 @@ class seuhelper:
 	def get_jsversion(self):
 		t = self.login(self.url_jsversion,{},method="GET")
 		r = re.compile(r'jsVersion=\'(.*)\'')
-		return str(r.findall(t)[0])
+		try:
+			ret = str(r.findall(t)[0])
+		except:
+			ret = "3.3.2"
+		return ret
 
 	def command_login(self):
 		# 0801Update: 全新适配新校园网登录模式
@@ -109,7 +124,7 @@ class seuhelper:
 		          'wlan_user_ipv6': '',
 		          'wlan_user_mac': self.macaddr,
 		          'wlan_ac_ip': '',
-		          'wlan_ac_name': 'jlh_me60',
+		          'wlan_ac_name': '',
 		          'jsVersion': self.jsversion,
 		          'v': self.random_captcha()}
 		return self.login(self.url_login, data=params, method='GET')
@@ -119,8 +134,8 @@ class seuhelper:
 		params = {'c': 'Portal',
 		          'a': 'logout',
 		          'callback': '1003',
-		          'user_account': "drcom",
-		          'user_password': "123456",
+		          'user_account': ',0,' + self.usr,
+		          'user_password': self.pwd,
 		          'login_method': '1',
 		          'ac_logout': '0',
 		          'register_mode': '1',
@@ -129,11 +144,11 @@ class seuhelper:
 		          'wlan_user_mac': self.macaddr,
 		          'wlan_vlan_id': '0',
 		          'wlan_ac_ip': '',
-		          'wlan_ac_name': 'jlh_me60',
+		          'wlan_ac_name': '',
 		          'jsVersion': self.jsversion,
 		          'v': self.random_captcha()}
 		header_logout = self.headers
-		header_logout['Referer'] = 'http://202.119.25.2/a79.htm?UserIP={}&wlanacname=jlh_me60'.format(self.ipaddr)
+		header_logout['Referer'] = 'http://w.seu.edu.cn/a79.htm?UserIP={}&wlanacname=jlh_me60'.format(self.ipaddr)
 		resptext = self.login(self.url_login, data=params, method="GET", header=header_logout)
 		if self.check_str(self.str_check, resptext):
 			print("用户:" + self.usr + " 已注销登录！")
@@ -141,8 +156,11 @@ class seuhelper:
 			print("注销登录失败，用户可能还未登录...")
 
 	def check_status(self):
-		params = {'callback': 'dr1002',
+		params = {'callback': 'dr1001',
+		          'c': 'Portal',
+		          'a': 'page_type_data',
 		          'v': self.random_captcha()}
+		print("检测登录状态中...")
 		resptext = self.login(self.url_checkstatus, data=params, method='GET')
 		if self.check_str(self.str_status, resptext):
 			return True
@@ -160,7 +178,7 @@ class seuhelper:
 					print("用户:" + str(self.usr) + " 已在登录状态，等待下次检测...")
 					last_status = True
 				else:
-					print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())) + " 检测通过√")
+					print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())) + " 用户在线√")
 			else:
 				print("用户未登录，准备自动登录中...")
 				self.command_login()
